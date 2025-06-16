@@ -18,6 +18,7 @@ namespace NgXQuickFix
     {
         private readonly string _username = string.Empty;
         private readonly string _password = string.Empty;
+        private SessionID _sessionId;
         public MyQuickFixApp(string username, string password)
         {
             _username = username;
@@ -38,6 +39,9 @@ namespace NgXQuickFix
             {
                 Console.WriteLine("Unsupported message: " + e.Message);
             }
+            catch (FieldNotFoundException) { }
+            catch (IncorrectDataFormat) { }
+            catch (IncorrectTagValue) { }
             catch (Exception ex)
             {
                 Console.WriteLine("Error in FromApp: " + ex.Message);
@@ -191,6 +195,11 @@ namespace NgXQuickFix
             header.SetField(QuerySenderCompID());
             header.SetField(QueryTargetCompID());
             if (QueryConfirm("Use TargetSubID")) header.SetField(QueryTargetSubID());
+        }
+        public bool SendMessage(QuickFix.FIX50SP1.Message message)
+        {
+            if (_sessionId == null) return false;
+            return Session.SendToTarget(message, _sessionId);
         }
 
         private byte QueryVersion()
@@ -361,12 +370,14 @@ namespace NgXQuickFix
         public void OnCreate(SessionID sessionID)
         {
             Console.WriteLine("Session created successfully! {0}", sessionID);
+            _sessionId = sessionID;
 
         }
 
         public void OnLogon(SessionID sessionID)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Logon successfully! {0}", sessionID);
+            _sessionId = sessionID;
         }
 
         public void OnLogout(SessionID sessionID)

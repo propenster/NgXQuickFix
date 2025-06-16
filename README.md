@@ -100,6 +100,128 @@ dotnet run --project NgXQuickFix
 
 ```
 
+## 3. The Client is now CLI
+**The NgXQuickFix tradeclient has been modified into a command line application with subcommands for order, marketdata etc**
+### General Help
+```bash
+NgXQuickFix.exe -h
+```
+```bash
+Description:
+  NgXQuickFix FIX protocol trading client for Nigeria Stock Exchange
+
+Usage:
+  NgXQuickFix [command] [options]
+
+Options:
+  --fix-version <fix-version> (REQUIRED)  FIX protocol version (default: FIX.5.0SP1) e.g FIX.4.0 FIX.4.1 FIX.4.2 FIX.4.3 FIX.4.5 FIXT.1.1 (FIX.5.0) [default: FIX.5.0SP1]
+  --version                               Show version information
+  -?, -h, --help                          Show help and usage information
+
+Commands:
+  order        Order processing commands
+  market-data  Get market data
+
+```
+
+### order help
+```bash
+NgXQuickFix.exe order -h
+```
+```bash
+Description:
+  Order processing commands
+
+Usage:
+  NgXQuickFix order [command] [options]
+
+Options:
+  --fix-version <fix-version> (REQUIRED)  FIX protocol version (default: FIX.5.0SP1) e.g FIX.4.0 FIX.4.1 FIX.4.2 FIX.4.3 FIX.4.5 FIXT.1.1 (FIX.5.0) [default: FIX.5.0SP1]
+  -?, -h, --help                          Show help and usage information
+
+Commands:
+  create   create an order
+  cancel   cancel an order
+  replace  cancel replace an order
+```
+
+### order create help
+```bash
+NgXQuickFix.exe order create -h
+```
+```bash
+Description:
+  create an order
+
+Usage:
+  NgXQuickFix order create [options]
+
+Options:
+  --clord-id <clord-id> (REQUIRED)                                                                Client order ID
+  --side <BUY|CROSS|CROSS_SHORT|CROSS_SHORT_EXEMPT|SELL|SELL_SHORT|SELL_SHORT_EXEMPT> (REQUIRED)  Order side: BUY, SELL, SELL_SHORT, SELL_SHORT_EXEMPT, CROSS, CROSS_SHORT, or CROSS_SHORT_EXEMPT.
+  --symbol <symbol> (REQUIRED)                                                                    Trading symbol or ticker for the instrument (e.g., AIRTELAFRI, ZENITHBANK, MTNN, GTCO, DANGCEM).
+  --ord-type <LIMIT|MARKET|STOP|STOP_LIMIT> (REQUIRED)                                            Order type: MARKET, LIMIT, STOP, or STOP_LIMIT.
+  --ord-qty <ord-qty> (REQUIRED)                                                                  Quantity of the instrument to trade (e.g., 1000, 5000).
+  --price <price>                                                                                 Price at which to execute the order (required for LIMIT and STOP_LIMIT orders).
+  --time-in-force <DAY|GTC|GTX|IOC|OPG>                                                           Time in force: DAY, IOC (Immediate or Cancel), OPG (At the Opening), GTC (Good Till Cancel), or GTX (Good Till
+                                                                                                  Crossing). [default: DAY]
+  --stop-px <stop-px>                                                                             Price at which to stop the order (required for LIMIT and STOP_LIMIT orders).
+  --use-target-sub-id                                                                             Whether to use/collect target subID [default: False]
+  --sender-comp-id <sender-comp-id>                                                               Sender CompID
+  --target-comp-id <target-comp-id>                                                               Target CompID
+  --target-sub-id <target-sub-id>                                                                 Target SubID
+  --fix-version <fix-version> (REQUIRED)                                                          FIX protocol version (default: FIX.5.0SP1) e.g FIX.4.0 FIX.4.1 FIX.4.2 FIX.4.3 FIX.4.5 FIXT.1.1 (FIX.5.0)
+                                                                                                  [default: FIX.5.0SP1]
+  -?, -h, --help                                                                                  Show help and usage information
+
+```
+
+### order cancel help
+```bash
+NgXQuickFix.exe order cancel -h
+```
+```bash
+Description:
+  cancel an order
+
+Usage:
+  NgXQuickFix order cancel [options]
+
+Options:
+  --clord-id <clord-id> (REQUIRED)                                                                Client order ID
+  --side <BUY|CROSS|CROSS_SHORT|CROSS_SHORT_EXEMPT|SELL|SELL_SHORT|SELL_SHORT_EXEMPT> (REQUIRED)  Order side: BUY, SELL, SELL_SHORT, SELL_SHORT_EXEMPT, CROSS, CROSS_SHORT, or CROSS_SHORT_EXEMPT.
+  --symbol <symbol> (REQUIRED)                                                                    Trading symbol or ticker for the instrument (e.g., AIRTELAFRI, MTNN, DANGCEM).
+  --ord-qty <ord-qty> (REQUIRED)                                                                  Quantity of the instrument to trade (e.g., 1000, 5000).
+  --fix-version <fix-version> (REQUIRED)                                                          FIX protocol version (default: FIX.5.0SP1) e.g FIX.4.0 FIX.4.1 FIX.4.2 FIX.4.3 FIX.4.5 FIXT.1.1 (FIX.5.0)
+                                                                                                  [default: FIX.5.0SP1]
+  -?, -h, --help                                                                                  Show help and usage information
+```
+
+### market data help
+```bash
+NgXQuickFix.exe market-data -h
+```
+```bash
+Description:
+  Get market data
+
+Usage:
+  NgXQuickFix market-data [options]
+
+Options:
+  --symbol <symbol> (REQUIRED)                                                      Trading symbol or ticker for the instrument (e.g., AIRTELAFRI, MTNN, DANGCEM).
+  --subscription-type <DISABLE_PREVIOUS|SNAPSHOT|SNAPSHOT_PLUS_UPDATES> (REQUIRED)  Market data subscription type e.g SNAPSHOT [default: SNAPSHOT]
+  --market-depth <market-depth>                                                     Market data depth [default: 0]
+  --use-target-sub-id                                                               Whether to use/collect target subID [default: False]
+  --sender-comp-id <sender-comp-id>                                                 Sender CompID
+  --target-comp-id <target-comp-id>                                                 Target CompID
+  --target-sub-id <target-sub-id>                                                   Target SubID
+  --fix-version <fix-version> (REQUIRED)                                            FIX protocol version (default: FIX.5.0SP1) e.g FIX.4.0 FIX.4.1 FIX.4.2 FIX.4.3 FIX.4.5 FIXT.1.1 (FIX.5.0) [default:
+                                                                                    FIX.5.0SP1]
+  -?, -h, --help                                                                    Show help and usage information
+
+```
+
 
 ## 📤 **Message Flow Supported**
 
